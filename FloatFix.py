@@ -1,4 +1,5 @@
 import numbers
+import sys
 
 
 def decor(fun, arg):
@@ -30,13 +31,4 @@ class fixed(type):
         return super().__prepare__(name, bases)
 
 
-from fractions import Fraction
-from decimal import Decimal
-
-class C(metaclass=fixed, ndigits=4):
-    def div(self, a, b):
-        return a / b
-
-print(C().div(6, 7))
-print(C().div(Fraction(6), Fraction(7)))
-print(C().div(Decimal(6), Decimal(7)))
+exec(sys.stdin.read())

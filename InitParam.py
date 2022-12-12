@@ -1,12 +1,17 @@
 import numbers
+import sys
 import types
 
 
 def decor(fun):
     def new_f(*args, **kwargs):
-        # print(fun.__defaults__)
-        for i, j in list(fun.__annotations__.items())[len(args) - 1:]:
-            if i not in fun.__defaults__ and i not in kwargs:
+        if fun.__defaults__:
+            right = len(fun.__defaults__)
+        else:
+            right = -len(fun.__annotations__)
+        for i, j in list(fun.__annotations__.items())[len(args) - 1:-right]:
+            # print(i, j)
+            if i not in kwargs:
                 if type(j) == types.GenericAlias:
                     kwargs[i] = j.__origin__()
                     # fun.__defaults__ += (i,)
@@ -41,9 +46,4 @@ class init(type):
         return super().__prepare__(name, bases)
 
 
-class C(metaclass=init):
-    def __init__(self, var: int, rng: range, lst: list[int], defined: str = "defined"):
-        self.data = f"{var}/{rng}/{lst}/{defined}"
-
-for c in (C(), C(1, range(3)), C(rng=range(4, 7)), C(lst=[1, 2, 3], defined=3)):
-    print(c.data)
+exec(sys.stdin.read())
